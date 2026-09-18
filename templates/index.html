@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Home | NBA Player Similarity Explorer{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <p class="eyebrow">NBA Analytics and Machine Learning</p>
+
+        <h1>Discover similar NBA players and build a balanced roster.</h1>
+
+        <p class="hero-description">
+            Compare players using standardized basketball statistics,
+            explore their closest statistical matches, and receive
+            recommendations based on your roster's needs.
+        </p>
+
+        <a class="primary-button" href="#features">
+            Explore the Project
+        </a>
+    </div>
+</section>
+
+<section class="content-section" id="features">
+    <div class="section-heading">
+        <p class="eyebrow">Planned Features</p>
+        <h2>What the application will do</h2>
+    </div>
+
+    <div class="feature-grid">
+        {% for feature in project_features %}
+        <article class="feature-card">
+            <span class="feature-number">{{ loop.index }}</span>
+            <h3>{{ feature }}</h3>
+            <p>
+                This feature will become available as we add the NBA
+                dataset and machine-learning model.
+            </p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="content-section model-preview">
+    <div>
+        <p class="eyebrow">Model Preview</p>
+        <h2>Player similarity search</h2>
+
+        <p>
+            The completed model will standardize player statistics and
+            use nearest-neighbor search with cosine distance.
+        </p>
+    </div>
+
+    <form class="search-form" id="player-search-form">
+        <label for="player-name">NBA player</label>
+
+        <input
+            id="player-name"
+            name="player_name"
+            type="text"
+            placeholder="Example: Stephen Curry"
+            disabled
+        >
+
+        <button type="submit" disabled>
+            Dataset coming next
+        </button>
+    </form>
+</section>
+{% endblock %}
