@@ -32,10 +32,11 @@
         <article class="feature-card">
             <span class="feature-number">{{ loop.index }}</span>
             <h3>{{ feature }}</h3>
-            <p>
-                This feature will become available as we add the NBA
-                dataset and machine-learning model.
-            </p>
+                {% if loop.first %}
+                <p>Search the 2025–26 player dataset and explore the closest statistical matches.</p>
+                {% else %}
+                <p>This feature is planned for a future project checkpoint.</p>
+                {% endif %}
         </article>
         {% endfor %}
     </div>
@@ -43,29 +44,75 @@
 
 <section class="content-section model-preview">
     <div>
-        <p class="eyebrow">Model Preview</p>
-        <h2>Player similarity search</h2>
+        <p class="eyebrow">Player Similarity</p>
+        <h2>Find a player's closest matches</h2>
 
         <p>
-            The completed model will standardize player statistics and
-            use nearest-neighbor search with cosine distance.
+            The model standardizes player statistics and uses
+            nearest-neighbor search with Euclidean distance.
+            A smaller distance means a closer statistical match.
         </p>
     </div>
 
-    <form class="search-form" id="player-search-form">
-        <label for="player-name">NBA player</label>
+    <div>
+        <form class="search-form" id="player-search-form" method="get" action="/">
+            <label for="player-name">NBA player</label>
 
-        <input
-            id="player-name"
-            name="player_name"
-            type="text"
-            placeholder="Example: Stephen Curry"
-            disabled
-        >
+            <input
+                id="player-name"
+                name="player_name"
+                type="text"
+                list="player-options"
+                value="{{ player_name }}"
+                placeholder="Example: Jalen Brunson"
+                required
+            >
 
-        <button type="submit" disabled>
-            Dataset coming next
-        </button>
-    </form>
+            <datalist id="player-options">
+                {% for name in player_names %}
+                <option value="{{ name }}"></option>
+                {% endfor %}
+            </datalist>
+
+            <button type="submit">Find similar players</button>
+        </form>
+
+        {% if error %}
+        <p role="alert">{{ error }}</p>
+        {% endif %}
+
+        {% if results %}
+        <div class="similarity-results">
+            <h3>Players most similar to {{ player_name }}</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Team</th>
+                        <th>PTS</th>
+                        <th>REB</th>
+                        <th>AST</th>
+                        <th>3PA</th>
+                        <th>Distance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in results %}
+                    <tr>
+                        <td>{{ player.PLAYER_NAME }}</td>
+                        <td>{{ player.TEAM_ABBREVIATION }}</td>
+                        <td>{{ player.PTS }}</td>
+                        <td>{{ player.REB }}</td>
+                        <td>{{ player.AST }}</td>
+                        <td>{{ player.FG3A }}</td>
+                        <td>{{ "%.2f"|format(player.DISTANCE) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
 </section>
 {% endblock %}

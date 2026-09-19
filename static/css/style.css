@@ -193,9 +193,48 @@ h2 {
 }
 
 .search-form button {
-    background: #3b465c;
-    color: #cbd5e1;
-    cursor: not-allowed;
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background: var(--primary-hover);
+}
+
+.similarity-results {
+    margin-top: 1.75rem;
+    overflow-x: auto;
+}
+
+.similarity-results h3 {
+    margin-bottom: 1rem;
+}
+
+.similarity-results table {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.similarity-results th,
+.similarity-results td {
+    padding: 0.7rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.similarity-results th {
+    color: var(--primary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.similarity-results tbody tr:hover {
+    background: var(--surface-light);
 }
 
 .site-footer {
