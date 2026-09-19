@@ -182,3 +182,4 @@ cython_debug/
 
 # Downloaded NBA statistics
 data/raw/*.csv
+data/processed/*.csv
