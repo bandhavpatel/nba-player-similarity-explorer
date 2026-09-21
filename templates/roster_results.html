@@ -150,6 +150,83 @@
             </div>
         </section>
         {% endif %}
+            {% if recommendations %}
+            <section class="recommendations-section">
+                <div class="section-heading">
+                    <p class="eyebrow">Recommended Players</p>
+                    <h2>Players who complement this roster</h2>
+
+                    <p>
+                        These players are ranked by how strongly they address
+                        the roster's two lowest-rated categories while also
+                        considering their overall statistical profile.
+                    </p>
+                </div>
+
+                <div class="recommendation-grid">
+                    {% for player in recommendations %}
+                    <article class="recommendation-card">
+                        <div class="recommendation-card-header">
+                            <div>
+                                <p class="recommendation-rank">
+                                    Recommendation {{ loop.index }}
+                                </p>
+                                <h3>{{ player.PLAYER_NAME }}</h3>
+                                <p class="recommendation-team">
+                                    {{ player.TEAM_ABBREVIATION }}
+                                </p>
+                            </div>
+
+                            <div class="fit-score">
+                                <span>Fit score</span>
+                                <strong>
+                                    {{ "%+.2f"|format(player.FIT_SCORE) }}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <p class="best-fit-category">
+                            Best roster fit:
+                            <strong>{{ player.BEST_FIT_CATEGORY }}</strong>
+                        </p>
+
+                        <div class="recommendation-stats">
+                            <div>
+                                <span>PTS</span>
+                                <strong>{{ player.PTS }}</strong>
+                            </div>
+                            <div>
+                                <span>REB</span>
+                                <strong>{{ player.REB }}</strong>
+                            </div>
+                            <div>
+                                <span>AST</span>
+                                <strong>{{ player.AST }}</strong>
+                            </div>
+                            <div>
+                                <span>STL</span>
+                                <strong>{{ player.STL }}</strong>
+                            </div>
+                            <div>
+                                <span>BLK</span>
+                                <strong>{{ player.BLK }}</strong>
+                            </div>
+                            <div>
+                                <span>3PA</span>
+                                <strong>{{ player.FG3A }}</strong>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <p class="recommendation-explanation">
+                    Fit scores are standardized rankings, not percentages.
+                    Higher scores indicate a stronger statistical fit for this
+                    roster's current priorities.
+                </p>
+            </section>
+            {% endif %}
 
         <div class="similarity-results roster-table">
             <h2>Selected players</h2>

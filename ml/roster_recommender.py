@@ -3,6 +3,8 @@ import pandas as pd
 
 ROSTER_SIZE = 5
 
+RECOMMENDATION_COUNT = 5
+
 ROSTER_SUMMARY_COLUMNS = {
     "PTS": "Points",
     "REB": "Rebounds",
@@ -142,3 +144,104 @@ def analyze_roster(
         "strengths": ranked_comparisons[:2],
         "priorities": ranked_comparisons[-2:][::-1],
     }
+
+
+def recommend_players(
+    players: pd.DataFrame,
+    roster: pd.DataFrame,
+    limit: int = RECOMMENDATION_COUNT,
+) -> list[dict]:
+    """Recommend players who complement the roster's weakest categories."""
+
+    if limit < 1:
+        raise ValueError("The recommendation limit must be at least one.")
+
+    statistic_columns = list(ROSTER_ANALYSIS_COLUMNS)
+
+    required_columns = [
+        "PLAYER_NAME",
+        "TEAM_ABBREVIATION",
+        *statistic_columns,
+    ]
+
+    missing_columns = [
+        column
+        for column in required_columns
+        if column not in players.columns or column not in roster.columns
+    ]
+
+    if missing_columns:
+        raise ValueError(
+            f"Required recommendation column is missing: {missing_columns[0]}"
+        )
+
+    roster_names = {
+        name.casefold()
+        for name in roster["PLAYER_NAME"].tolist()
+    }
+
+    candidates = players[
+        ~players["PLAYER_NAME"]
+        .str.casefold()
+        .isin(roster_names)
+    ].copy()
+
+    if candidates.empty:
+        raise ValueError("No eligible players are available for recommendation.")
+
+    population_averages = players[statistic_columns].mean()
+    population_standard_deviations = (
+        players[statistic_columns]
+        .std(ddof=0)
+        .replace(0, 1)
+    )
+
+    roster_scores = (
+        roster[statistic_columns].mean() - population_averages
+    ) / population_standard_deviations
+
+    priority_columns = (
+        roster_scores
+        .sort_values()
+        .head(2)
+        .index
+        .tolist()
+    )
+
+    candidate_scores = (
+        candidates[statistic_columns] - population_averages
+    ) / population_standard_deviations
+
+    priority_score = candidate_scores[priority_columns].mean(axis=1)
+    overall_score = candidate_scores[statistic_columns].mean(axis=1)
+
+    candidates["FIT_SCORE"] = (
+        (priority_score * 0.75) + (overall_score * 0.25)
+    ).round(2)
+
+    candidates["BEST_FIT_CATEGORY"] = (
+        candidate_scores[priority_columns]
+        .idxmax(axis=1)
+        .map(ROSTER_ANALYSIS_COLUMNS)
+    )
+
+    recommendations = (
+        candidates
+        .sort_values("FIT_SCORE", ascending=False)
+        .head(limit)
+    )
+
+    display_columns = [
+        "PLAYER_NAME",
+        "TEAM_ABBREVIATION",
+        "PTS",
+        "REB",
+        "AST",
+        "STL",
+        "BLK",
+        "FG3A",
+        "FIT_SCORE",
+        "BEST_FIT_CATEGORY",
+    ]
+
+    return recommendations[display_columns].to_dict(orient="records")

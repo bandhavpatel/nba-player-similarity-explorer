@@ -7,6 +7,7 @@ from ml.roster_recommender import (
     analyze_roster,
     build_roster,
     calculate_roster_averages,
+    recommend_players,
 )
 from ml.similarity import find_similar_players
 
@@ -59,6 +60,7 @@ def roster():
             roster=None,
             roster_averages=None,
             roster_analysis=None,
+            recommendations=None,
             error="Player data is missing. Run the fetch and preprocessing scripts first.",
         )
 
@@ -73,11 +75,13 @@ def roster():
         roster_records = selected_roster.to_dict(orient="records")
         roster_averages = calculate_roster_averages(selected_roster)
         roster_analysis = analyze_roster(players, selected_roster)
+        recommendations = recommend_players(players, selected_roster)
         error = None
     except ValueError as exc:
         roster_records = None
         roster_averages = None
         roster_analysis = None
+        recommendations = None
         error = str(exc)
 
     return render_template(
@@ -85,6 +89,7 @@ def roster():
         roster=roster_records,
         roster_averages=roster_averages,
         roster_analysis=roster_analysis,
+        recommendations=recommendations,
         error=error,
     )
 
