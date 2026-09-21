@@ -392,3 +392,231 @@ h2 {
         grid-template-columns: 1fr;
     }
 }
+
+/* Roster analysis results */
+
+.roster-results-page {
+    padding-top: 4rem;
+}
+
+.roster-results-page > .section-heading > p:not(.eyebrow),
+.roster-analysis .section-heading > p:not(.eyebrow) {
+    color: var(--muted);
+}
+
+.roster-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 2.5rem 0 4rem;
+}
+
+.roster-summary-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+}
+
+.summary-label {
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.summary-value {
+    margin: 0.35rem 0;
+    color: var(--text);
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.summary-description {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.roster-analysis {
+    margin: 4rem 0;
+}
+
+.analysis-highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.analysis-panel {
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+}
+
+.strength-panel {
+    border-top: 3px solid #22c55e;
+}
+
+.priority-panel {
+    border-top: 3px solid var(--primary);
+}
+
+.analysis-panel-label {
+    margin-bottom: 0.35rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.analysis-panel h3 {
+    margin-bottom: 1.25rem;
+    font-size: 1.25rem;
+}
+
+.analysis-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.analysis-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--surface-light);
+}
+
+.analysis-stat-label {
+    font-weight: 700;
+}
+
+.analysis-stat-comparison {
+    margin-top: 0.2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.analysis-score {
+    flex-shrink: 0;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.4rem;
+    font-weight: 700;
+}
+
+.positive-score {
+    background: rgba(34, 197, 94, 0.14);
+    color: #86efac;
+}
+
+.priority-score {
+    background: rgba(249, 115, 22, 0.14);
+    color: #fdba74;
+}
+
+.analysis-table-wrapper {
+    padding: 1.75rem;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+}
+
+.analysis-table-wrapper h3 {
+    margin-bottom: 1.25rem;
+}
+
+.analysis-table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.analysis-table th,
+.analysis-table td {
+    padding: 0.85rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.analysis-table th {
+    color: var(--primary);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.analysis-table tbody tr:hover {
+    background: var(--surface-light);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-strength {
+    background: rgba(34, 197, 94, 0.14);
+    color: #86efac;
+}
+
+.status-balanced {
+    background: rgba(59, 130, 246, 0.14);
+    color: #93c5fd;
+}
+
+.status-improvement {
+    background: rgba(249, 115, 22, 0.14);
+    color: #fdba74;
+}
+
+.analysis-explanation {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.roster-table {
+    margin: 4rem 0 1.5rem;
+}
+
+.roster-table h2 {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+    .roster-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analysis-highlight-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .roster-results-page {
+        padding: 3rem 1rem;
+    }
+
+    .roster-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .analysis-list-item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

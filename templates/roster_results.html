@@ -9,7 +9,8 @@
         <h1>Your five-player roster</h1>
 
         <p>
-            Review the players selected for your lineup.
+            Review your selected players and see how the roster compares
+            with the eligible-player population.
         </p>
     </div>
 
@@ -18,45 +19,167 @@
     {% endif %}
 
     {% if roster %}
-    <div class="roster-summary">
-        {% for statistic in roster_averages %}
-        <article class="summary-card">
-            <p class="summary-label">{{ statistic.label }}</p>
-            <p class="summary-value">{{ statistic.value }}</p>
-            <p class="summary-abbreviation">
-                Average {{ statistic.abbreviation }} per player
-            </p>
-        </article>
-        {% endfor %}
-    </div>
+        {% if roster_averages %}
+        <div class="roster-summary-grid">
+            {% for statistic in roster_averages %}
+            <article class="roster-summary-card">
+                <p class="summary-label">{{ statistic.label }}</p>
+                <p class="summary-value">{{ statistic.value }}</p>
+                <p class="summary-description">
+                    Average {{ statistic.abbreviation }} per player
+                </p>
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
 
-    <div class="similarity-results">
-        <table>
-            <thead>
-                <tr>
-                    <th>Player</th>
-                    <th>Team</th>
-                    <th>PTS</th>
-                    <th>REB</th>
-                    <th>AST</th>
-                    <th>3PA</th>
-                </tr>
-            </thead>
+        {% if roster_analysis %}
+        <section class="roster-analysis">
+            <div class="section-heading">
+                <p class="eyebrow">Roster Analysis</p>
+                <h2>Strengths and improvement priorities</h2>
 
-            <tbody>
-                {% for player in roster %}
-                <tr>
-                    <td>{{ player.PLAYER_NAME }}</td>
-                    <td>{{ player.TEAM_ABBREVIATION }}</td>
-                    <td>{{ player.PTS }}</td>
-                    <td>{{ player.REB }}</td>
-                    <td>{{ player.AST }}</td>
-                    <td>{{ player.FG3A }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                <p>
+                    Each category compares your roster average with the
+                    average across all eligible players in the dataset.
+                </p>
+            </div>
+
+            <div class="analysis-highlight-grid">
+                <article class="analysis-panel strength-panel">
+                    <p class="analysis-panel-label">Top strengths</p>
+                    <h3>What this roster does well</h3>
+
+                    <div class="analysis-list">
+                        {% for statistic in roster_analysis.strengths %}
+                        <div class="analysis-list-item">
+                            <div>
+                                <p class="analysis-stat-label">
+                                    {{ statistic.label }}
+                                </p>
+                                <p class="analysis-stat-comparison">
+                                    Roster: {{ statistic.roster_average }}
+                                    · Player average:
+                                    {{ statistic.population_average }}
+                                </p>
+                            </div>
+
+                            <span class="analysis-score positive-score">
+                                {{ "%+.2f"|format(statistic.score) }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="analysis-panel priority-panel">
+                    <p class="analysis-panel-label">Improvement priorities</p>
+                    <h3>Where the roster can improve</h3>
+
+                    <div class="analysis-list">
+                        {% for statistic in roster_analysis.priorities %}
+                        <div class="analysis-list-item">
+                            <div>
+                                <p class="analysis-stat-label">
+                                    {{ statistic.label }}
+                                </p>
+                                <p class="analysis-stat-comparison">
+                                    Roster: {{ statistic.roster_average }}
+                                    · Player average:
+                                    {{ statistic.population_average }}
+                                </p>
+                            </div>
+
+                            <span class="analysis-score priority-score">
+                                {{ "%+.2f"|format(statistic.score) }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </article>
+            </div>
+
+            <div class="analysis-table-wrapper">
+                <h3>Complete roster comparison</h3>
+
+                <table class="analysis-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Roster average</th>
+                            <th>Player average</th>
+                            <th>Score</th>
+                            <th>Assessment</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for statistic in roster_analysis.comparisons %}
+                        <tr>
+                            <td>{{ statistic.label }}</td>
+                            <td>{{ statistic.roster_average }}</td>
+                            <td>{{ statistic.population_average }}</td>
+                            <td>
+                                {{ "%+.2f"|format(statistic.score) }}
+                            </td>
+                            <td>
+                                {% if statistic.status == "Strength" %}
+                                <span class="status-badge status-strength">
+                                    {{ statistic.status }}
+                                </span>
+                                {% elif statistic.status == "Needs improvement" %}
+                                <span class="status-badge status-improvement">
+                                    {{ statistic.status }}
+                                </span>
+                                {% else %}
+                                <span class="status-badge status-balanced">
+                                    {{ statistic.status }}
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <p class="analysis-explanation">
+                    Scores show how far the roster is above or below the
+                    eligible-player average. Positive scores are above average,
+                    while negative scores are below average.
+                </p>
+            </div>
+        </section>
+        {% endif %}
+
+        <div class="similarity-results roster-table">
+            <h2>Selected players</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Team</th>
+                        <th>PTS</th>
+                        <th>REB</th>
+                        <th>AST</th>
+                        <th>3PA</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for player in roster %}
+                    <tr>
+                        <td>{{ player.PLAYER_NAME }}</td>
+                        <td>{{ player.TEAM_ABBREVIATION }}</td>
+                        <td>{{ player.PTS }}</td>
+                        <td>{{ player.REB }}</td>
+                        <td>{{ player.AST }}</td>
+                        <td>{{ player.FG3A }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 
     <a class="primary-button" href="/">

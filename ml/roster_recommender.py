@@ -11,6 +11,16 @@ ROSTER_SUMMARY_COLUMNS = {
 }
 
 
+ROSTER_ANALYSIS_COLUMNS = {
+    "PTS": "Scoring",
+    "REB": "Rebounding",
+    "AST": "Playmaking",
+    "STL": "Perimeter defense",
+    "BLK": "Rim protection",
+    "FG3A": "Three-point volume",
+}
+
+
 def build_roster(players: pd.DataFrame, player_names: list[str]) -> pd.DataFrame:
     """Validate five selected players and return their records in selection order."""
 
@@ -77,3 +87,58 @@ def calculate_roster_averages(roster: pd.DataFrame) -> list[dict]:
         )
 
     return averages
+
+def analyze_roster(
+    players: pd.DataFrame,
+    roster: pd.DataFrame,
+) -> dict:
+    """Compare roster averages with the eligible-player population."""
+
+    comparisons = []
+
+    for column, label in ROSTER_ANALYSIS_COLUMNS.items():
+        if column not in players.columns or column not in roster.columns:
+            raise ValueError(
+                f"Required roster-analysis statistic is missing: {column}"
+            )
+
+        population_average = float(players[column].mean())
+        population_std = float(players[column].std(ddof=0))
+        roster_average = float(roster[column].mean())
+
+        if population_std == 0:
+            standardized_score = 0.0
+        else:
+            standardized_score = (
+                roster_average - population_average
+            ) / population_std
+
+        if standardized_score >= 0.5:
+            status = "Strength"
+        elif standardized_score <= -0.5:
+            status = "Needs improvement"
+        else:
+            status = "Balanced"
+
+        comparisons.append(
+            {
+                "label": label,
+                "abbreviation": column,
+                "roster_average": round(roster_average, 1),
+                "population_average": round(population_average, 1),
+                "score": round(standardized_score, 2),
+                "status": status,
+            }
+        )
+
+    ranked_comparisons = sorted(
+        comparisons,
+        key=lambda statistic: statistic["score"],
+        reverse=True,
+    )
+
+    return {
+        "comparisons": comparisons,
+        "strengths": ranked_comparisons[:2],
+        "priorities": ranked_comparisons[-2:][::-1],
+    }
