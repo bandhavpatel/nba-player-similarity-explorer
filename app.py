@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 from flask import Flask, render_template, request
 
+from ml.roster_recommender import build_roster
 from ml.similarity import find_similar_players
 
 app = Flask(__name__)
@@ -42,6 +43,36 @@ def home():
         player_names=player_names,
         player_name=player_name,
         results=results,
+        error=error,
+    )
+
+
+@app.route("/roster", methods=["POST"])
+def roster():
+    if not DATA_PATH.exists():
+        return render_template(
+            "roster_results.html",
+            roster=None,
+            error="Player data is missing. Run the fetch and preprocessing scripts first.",
+        )
+
+    players = pd.read_csv(DATA_PATH)
+    selected_names = [
+        request.form.get(f"player_{position}", "")
+        for position in range(1, 6)
+    ]
+
+    try:
+        selected_roster = build_roster(players, selected_names)
+        roster_records = selected_roster.to_dict(orient="records")
+        error = None
+    except ValueError as exc:
+        roster_records = None
+        error = str(exc)
+
+    return render_template(
+        "roster_results.html",
+        roster=roster_records,
         error=error,
     )
 

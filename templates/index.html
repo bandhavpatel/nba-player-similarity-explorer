@@ -115,4 +115,46 @@
         {% endif %}
     </div>
 </section>
+
+<section class="content-section roster-builder">
+    <div class="section-heading">
+        <p class="eyebrow">Roster Builder</p>
+        <h2>Build a five-player lineup</h2>
+
+        <p>
+            Select five different NBA players to create and review your roster.
+        </p>
+    </div>
+
+    <form class="roster-form" method="post" action="/roster">
+        <div class="roster-fields">
+            {% for position in range(1, 6) %}
+            <div class="roster-field">
+                <label for="player-{{ position }}">
+                    Player {{ position }}
+                </label>
+
+                <input
+                    id="player-{{ position }}"
+                    name="player_{{ position }}"
+                    type="text"
+                    list="roster-player-options"
+                    placeholder="Select an NBA player"
+                    required
+                >
+            </div>
+            {% endfor %}
+        </div>
+
+        <datalist id="roster-player-options">
+            {% for name in player_names %}
+            <option value="{{ name }}"></option>
+            {% endfor %}
+        </datalist>
+
+        <button type="submit">Build roster</button>
+    </form>
+</section>
+
 {% endblock %}
+

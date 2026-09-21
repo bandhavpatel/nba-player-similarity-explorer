@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Roster Results | NBA Player Similarity Explorer{% endblock %}
+
+{% block content %}
+<section class="content-section roster-results-page">
+    <div class="section-heading">
+        <p class="eyebrow">Roster Builder</p>
+        <h1>Your five-player roster</h1>
+
+        <p>
+            Review the players selected for your lineup.
+        </p>
+    </div>
+
+    {% if error %}
+    <p role="alert">{{ error }}</p>
+    {% endif %}
+
+    {% if roster %}
+    <div class="similarity-results">
+        <table>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>PTS</th>
+                    <th>REB</th>
+                    <th>AST</th>
+                    <th>3PA</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for player in roster %}
+                <tr>
+                    <td>{{ player.PLAYER_NAME }}</td>
+                    <td>{{ player.TEAM_ABBREVIATION }}</td>
+                    <td>{{ player.PTS }}</td>
+                    <td>{{ player.REB }}</td>
+                    <td>{{ player.AST }}</td>
+                    <td>{{ player.FG3A }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <a class="primary-button" href="/">
+        Build another roster
+    </a>
+</section>
+{% endblock %}

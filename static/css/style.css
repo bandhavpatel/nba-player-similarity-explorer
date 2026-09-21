@@ -255,3 +255,93 @@ h2 {
         flex-direction: column;
     }
 }
+
+.roster-builder {
+    margin-bottom: 5rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+}
+
+.roster-builder .section-heading > p:last-child,
+.roster-results-page .section-heading > p:last-child {
+    color: var(--muted);
+}
+
+.roster-form {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.roster-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.roster-field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.roster-field label {
+    font-weight: 700;
+}
+
+.roster-field input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface-light);
+    color: var(--text);
+    font: inherit;
+}
+
+.roster-field input:focus {
+    border-color: var(--primary);
+    outline: 2px solid rgba(249, 115, 22, 0.2);
+}
+
+.roster-form button {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--primary);
+    border-radius: 0.5rem;
+    background: var(--primary);
+    color: white;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.roster-form button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.roster-results-page h1 {
+    max-width: none;
+    margin: 0;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+}
+
+.roster-results-page [role="alert"] {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--primary);
+    border-radius: 0.5rem;
+    background: rgba(249, 115, 22, 0.1);
+    color: var(--text);
+}
+
+.roster-results-page .primary-button {
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 800px) {
+    .roster-fields {
+        grid-template-columns: 1fr;
+    }
+}
