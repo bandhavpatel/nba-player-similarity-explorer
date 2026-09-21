@@ -18,6 +18,18 @@
     {% endif %}
 
     {% if roster %}
+    <div class="roster-summary">
+        {% for statistic in roster_averages %}
+        <article class="summary-card">
+            <p class="summary-label">{{ statistic.label }}</p>
+            <p class="summary-value">{{ statistic.value }}</p>
+            <p class="summary-abbreviation">
+                Average {{ statistic.abbreviation }} per player
+            </p>
+        </article>
+        {% endfor %}
+    </div>
+
     <div class="similarity-results">
         <table>
             <thead>

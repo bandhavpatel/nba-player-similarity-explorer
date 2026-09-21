@@ -3,6 +3,13 @@ import pandas as pd
 
 ROSTER_SIZE = 5
 
+ROSTER_SUMMARY_COLUMNS = {
+    "PTS": "Points",
+    "REB": "Rebounds",
+    "AST": "Assists",
+    "FG3A": "Three-point attempts",
+}
+
 
 def build_roster(players: pd.DataFrame, player_names: list[str]) -> pd.DataFrame:
     """Validate five selected players and return their records in selection order."""
@@ -48,3 +55,25 @@ def build_roster(players: pd.DataFrame, player_names: list[str]) -> pd.DataFrame
     )
 
     return roster
+
+
+def calculate_roster_averages(roster: pd.DataFrame) -> list[dict]:
+    """Calculate the five-player roster's average per-game statistics."""
+
+    averages = []
+
+    for column, label in ROSTER_SUMMARY_COLUMNS.items():
+        if column not in roster.columns:
+            raise ValueError(
+                f"Required roster statistic is missing: {column}"
+            )
+
+        averages.append(
+            {
+                "label": label,
+                "abbreviation": column,
+                "value": round(float(roster[column].mean()), 1),
+            }
+        )
+
+    return averages

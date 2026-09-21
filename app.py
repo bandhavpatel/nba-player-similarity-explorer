@@ -3,7 +3,10 @@ from pathlib import Path
 import pandas as pd
 from flask import Flask, render_template, request
 
-from ml.roster_recommender import build_roster
+from ml.roster_recommender import (
+    build_roster,
+    calculate_roster_averages,
+)
 from ml.similarity import find_similar_players
 
 app = Flask(__name__)
@@ -53,6 +56,7 @@ def roster():
         return render_template(
             "roster_results.html",
             roster=None,
+            roster_averages=None,
             error="Player data is missing. Run the fetch and preprocessing scripts first.",
         )
 
@@ -65,14 +69,17 @@ def roster():
     try:
         selected_roster = build_roster(players, selected_names)
         roster_records = selected_roster.to_dict(orient="records")
+        roster_averages = calculate_roster_averages(selected_roster)
         error = None
     except ValueError as exc:
         roster_records = None
+        roster_averages = None
         error = str(exc)
 
     return render_template(
         "roster_results.html",
         roster=roster_records,
+        roster_averages=roster_averages,
         error=error,
     )
 
